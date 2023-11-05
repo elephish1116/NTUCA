@@ -21,71 +21,73 @@ assign rd = instruction[11:7];
 assign imm = instruction[31:20];
 assign func7 = instruction[31:25];
 assign func3 = instruction[14:12];
-//wire [31:0] RS1data, RS2data;
 wire zero;
+wire ALUOp, ALUSrc, RegWrite;
+wire [31:0] data1, data2, WriteData, Sign_Extended, MUX_data2;
+wire [2:0] ALUCtrl;
 
 Control Control(
-		.Op_i				(opcode),
-		.ALUOp_o		(ALU_Control.ALUOp_i),
-		.ALUSrc_o		(MUX_ALUSrc.ALUSrc_i),
-		.RegWrite_o	(RegWrite_i)
+		.Op_i       (opcode),
+		.ALUOp_o    (ALUOp),
+		.ALUSrc_o   (ALUSrc),
+		.RegWrite_o (RegWrite)
 );
 
 Adder Add_PC(
-		.data1_i		(instruction_addr),
-		.data2_i		(32'd4),
-		.data_o			(pc)
+		.data1_i    (instruction_addr),
+		.data2_i    (32'd4),
+		.data_o     (pc)
 );
 
 PC PC(
-		.clk_i			(clk_i),
-		.rst_i			(rst_i),
-		.pc_i				(pc),
-		.pc_o				(instruction_addr)
+		.clk_i      (clk_i),
+		.rst_i      (rst_i),
+		.pc_i       (pc),
+		.pc_o       (instruction_addr)
 );
 
 Instruction_Memory Instruction_Memory(
-		.addr_i			(instruction_addr),
-		.instr_o		(instruction)
+		.addr_i     (instruction_addr),
+		.instr_o    (instruction)
 );
 
 Registers Registers(
-		.rst_i			(rst_i),
-		.clk_i			(clk_i),
-		.RS1addr_i	(rs1),
-		.RS2addr_i	(rs2),
-		.RDaddr_i		(rd),
-		.RDdata_i		(ALU.ALUout_o),
-		.RegWrite_i	(Control.RegWrite_o),
-		.RS1data_o	(ALU.data1_i),
-		.RS2data_o	(MUX_ALUSrc.data2_i)
+		.rst_i      (rst_i),
+		.clk_i      (clk_i),
+		.RS1addr_i  (rs1),
+		.RS2addr_i  (rs2),
+		.RDaddr_i   (rd),
+		.RDdata_i   (WriteData),
+		.RegWrite_i (RegWrite),
+		.RS1data_o  (data1),
+		.RS2data_o  (data2)
 );
 
 MUX32 MUX_ALUSrc(
-		.data2_i		(Registers.RS2data_o),
-		.extend_i		(Sign_Extend.data_o),
-		.ALUSrc_i		(Control.ALUSrc_o),
-		.data_o			(ALU.data2_i)
+		.data2_i    (data2),
+		.extend_i   (Sign_Extended),
+		.ALUSrc_i   (ALUSrc),
+		.data_o     (MUX_data2)
 );
 
 Sign_Extend Sign_Extend(
-		.data_i			(imm),
-		.data_o			(MUX_ALUSrc.extend_i)
+		.data_i     (imm),
+		.data_o     (Sign_Extended)
 );
   
 ALU ALU(
-		.data1_i		(Registers.RS1data_o),
-		.data2_i		(MUX_ALUSrc.data_o),
-		.ALUCtrl_i	(ALU_Control.ALUCtrl_o),
-		.ALUout_o		(Registers.RDdata_i),
-		.zero_o			(zero)
+		.data1_i    (data1),
+		.data2_i    (MUX_data2),
+		.ALUCtrl_i  (ALUCtrl),
+		.ALUout_o   (WriteData),
+		.zero_o     (zero)
 );
 
 ALU_Control ALU_Control(
-		.func7_i		(func7),
-		.func3_i		(func3),
-		.ALUOp_i		(Control.ALUOp_o),
-		.ALUCtrl_o	(ALU.ALUCtrl_i)
+		.func7_i    (func7),
+		.func3_i    (func3),
+		.ALUOp_i    (ALUOp),
+		.ALUCtrl_o  (ALUCtrl)
 );
 
 endmodule
