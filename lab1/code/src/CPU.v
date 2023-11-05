@@ -9,7 +9,7 @@ input               clk_i;
 input               rst_i;
 
 wire [31:0] instruction_addr, instruction, pc;
-wire [5:0] opcode;
+wire [6:0] opcode;
 wire [4:0] rs1, rs2, rd;
 wire [11:0] imm;
 wire [6:0] func7;

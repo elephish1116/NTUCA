@@ -7,7 +7,7 @@ module ALU
 		zero_o
 );
 
-input [31:0] data1_i, data2_i;
+input signed [31:0] data1_i, data2_i;
 input [2:0] ALUCtrl_i;
 output [31:0] ALUout_o;
 output zero_o;
@@ -18,7 +18,7 @@ assign ALUout_o = (ALUCtrl_i == 3'b000) ? data1_i & data2_i :
 (ALUCtrl_i == 3'b011) ? data1_i + data2_i :
 (ALUCtrl_i == 3'b100) ? data1_i - data2_i :
 (ALUCtrl_i == 3'b101) ? data1_i * data2_i :
-data1_i >> (data2_i & 12'b000000011111);
+data1_i >>> (data2_i & 12'b000000011111);
 
 assign zero_o = 1'b0;
 
