@@ -158,7 +158,7 @@ Data_Memory Data_Memory(
 );
 
 MEM_WB MEM_WB(
-	.clk_i           (clk_i),
+    .clk_i           (clk_i),
     .rst_i           (rst_i),
     .RegWrite_i      (EX_MEM.RegWrite_o),
     .MemtoReg_i      (EX_MEM.MemtoReg_o),

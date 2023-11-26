@@ -1,5 +1,5 @@
 $date
-	Sun Nov 26 03:25:35 2023
+	Sun Nov 26 03:47:17 2023
 $end
 $version
 	Icarus Verilog
@@ -47,13 +47,13 @@ $var wire 32 : data2_i [31:0] $end
 $upscope $end
 $scope module Control $end
 $var wire 1 ; ALUSrc_o $end
-$var wire 1 < MemRead_o $end
-$var wire 1 = MemWrite_o $end
-$var wire 1 > MemtoReg_o $end
-$var wire 7 ? Opcode_i [6:0] $end
-$var wire 1 @ RegWrite_o $end
-$var wire 1 A NoOp_i $end
-$var wire 1 B Branch_o $end
+$var wire 1 < Branch_o $end
+$var wire 1 = MemRead_o $end
+$var wire 1 > MemWrite_o $end
+$var wire 1 ? MemtoReg_o $end
+$var wire 7 @ Opcode_i [6:0] $end
+$var wire 1 A RegWrite_o $end
+$var wire 1 B NoOp_i $end
 $var wire 2 C ALUOp_o [1:0] $end
 $upscope $end
 $scope module Data_Memory $end
@@ -93,7 +93,7 @@ $var wire 5 Z EX_rs2_i [4:0] $end
 $var wire 5 [ EX_rs1_i [4:0] $end
 $upscope $end
 $scope module Hazard_Detection $end
-$var wire 1 A NoOp_o $end
+$var wire 1 B NoOp_o $end
 $var wire 1 \ PCWrite_o $end
 $var wire 1 ] Stall_o $end
 $var wire 5 ^ rs1_i [4:0] $end
@@ -104,10 +104,10 @@ $upscope $end
 $scope module ID_EX $end
 $var wire 2 a ALUOp_i [1:0] $end
 $var wire 1 ; ALUSrc_i $end
-$var wire 1 < MemRead_i $end
-$var wire 1 = MemWrite_i $end
-$var wire 1 > MemtoReg_i $end
-$var wire 1 @ RegWrite_i $end
+$var wire 1 = MemRead_i $end
+$var wire 1 > MemWrite_i $end
+$var wire 1 ? MemtoReg_i $end
+$var wire 1 A RegWrite_i $end
 $var wire 1 ! clk_i $end
 $var wire 1 " rst_i $end
 $var wire 32 b instr_i [31:0] $end
@@ -307,8 +307,8 @@ bx D
 bx C
 xB
 xA
-x@
-bx ?
+bx @
+x?
 x>
 x=
 x<
@@ -346,7 +346,7 @@ b0 I
 b11 0
 b11 4
 0;
-0@
+0A
 b0 -
 b0 *"
 b100 #"
@@ -364,10 +364,10 @@ b0 '"
 0(
 b0 e
 b0 u
-0>
-0B
+0?
 0<
 0=
+0>
 b0 V
 b0 ."
 b0 W
@@ -380,7 +380,7 @@ b0 :"
 b1100010000000100000110011 q
 b1100010000000100000110011 v
 b0 +
-b0 ?
+b0 @
 b0 )
 b0 _
 b0 9"
@@ -388,7 +388,7 @@ b0 *
 b0 ^
 b0 8"
 0]
-0A
+0B
 b0 D
 b0 y
 b0 ("
@@ -462,7 +462,7 @@ b100000 <"
 b110000 9
 b110000 ""
 b110000 8
-1@
+1A
 b11000 e
 b11000 u
 b10 C
@@ -470,7 +470,7 @@ b10 a
 b11111111111111111111111111101000 c
 b11111111111111111111111111101000 :"
 b110011 +
-b110011 ?
+b110011 @
 b11000 )
 b11000 _
 b11000 9"
@@ -677,7 +677,7 @@ b100 #
 b11111111111111111111111111101101 /
 b11111111111111111111111111101101 I
 1;
-0@
+0A
 b11111111111111111111111110110101 .
 b11111111111111111111111110110101 '"
 b110000 8
@@ -689,7 +689,7 @@ b111000 -
 b111000 *"
 b11000 e
 b11000 u
-1=
+1>
 b11111111111111111111111111001111 c
 b11111111111111111111111111001111 :"
 b11111111111111111111111111001111 ("
@@ -700,7 +700,7 @@ b111000 O
 b111000 +"
 b111000 /"
 b100011 +
-b100011 ?
+b100011 @
 b10000 )
 b10000 _
 b10000 9"
@@ -750,7 +750,7 @@ b101 #
 b11000 /
 b11000 I
 0;
-1@
+1A
 b100000111100 8
 b10 C
 b10 a
@@ -758,7 +758,7 @@ b0 .
 b0 '"
 b10000011110 e
 b10000011110 u
-0=
+0>
 b111110 d
 b111110 ;"
 b10 V
@@ -772,7 +772,7 @@ b1111000001000000100110011 v
 b11100 #"
 b11100 4"
 b110011 +
-b110011 ?
+b110011 @
 b11110 )
 b11110 _
 b11110 9"
@@ -939,7 +939,7 @@ b1000000000011010010011 v
 b100100 #"
 b100100 4"
 b10011 +
-b10011 ?
+b10011 @
 b10 )
 b10 _
 b10 9"
@@ -1106,7 +1106,7 @@ b1100000010101000100011 v
 b101100 #"
 b101100 4"
 b110011 +
-b110011 ?
+b110011 @
 b1101 )
 b1101 _
 b1101 9"
@@ -1167,7 +1167,7 @@ b1010 #
 b11110000 /
 b11110000 I
 1;
-0@
+0A
 b10 O
 b10 +"
 b10 /"
@@ -1182,7 +1182,7 @@ b10 V
 b10 ."
 b10100 e
 b10100 u
-1=
+1>
 b0 d
 b0 ;"
 b1111 ("
@@ -1194,7 +1194,7 @@ b111100 '"
 b10 -
 b10 *"
 b100011 +
-b100011 ?
+b100011 @
 b11 )
 b11 _
 b11 9"
@@ -1256,7 +1256,7 @@ b1011 #
 b10100 /
 b10100 I
 b0 8
-1@
+1A
 b11 0
 b11 4
 b1111 O
@@ -1264,9 +1264,9 @@ b1111 +"
 b1111 /"
 b0 e
 b0 u
-1>
-1<
-0=
+1?
+1=
+0>
 b0 V
 b0 ."
 b0 c
@@ -1276,7 +1276,7 @@ b10000000010101010000011 v
 b110100 #"
 b110100 4"
 b11 +
-b11 ?
+b11 @
 b0 )
 b0 _
 b0 9"
@@ -1478,11 +1478,11 @@ b0 8
 0;
 b0 e
 b0 u
-0@
+0A
 b110 D
 b110 y
-0>
-0<
+0?
+0=
 b101 ("
 b101 0"
 b101 3"
@@ -1490,7 +1490,7 @@ b101 7"
 b1000 -
 b1000 *"
 b0 +
-b0 ?
+b0 @
 b0 )
 b0 _
 b0 9"
