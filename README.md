@@ -5,3 +5,5 @@ RISC-V calculator
 RISC-V recurrence
 ## lab 1
 simple CPU without pipeline
+## lab 2
+CPU with pipeline, data hazard and forwarding
