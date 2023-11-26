@@ -74,9 +74,8 @@ always@(posedge Clk) begin
         $finish;
 
     // put in your own signal to count stall and flush
-    if(CPU.HDU.Stall_o == 1 && CPU.Control.Branch_o == 0)stall = stall + 1;
-    //if(CPU.flush == 1)flush = flush + 1;  
-    if(CPU.Control.Branch_o & (CPU.Registers.RS1data_o == CPU.Registers.RS2data_o))flush = flush + 1;
+    if(CPU.Hazard_Detection.Stall_o == 1 && CPU.Control.Branch_o == 0)stall = stall + 1;
+    if(CPU.ID_FlushIF == 1)flush = flush + 1;  
     // print PC
     // DO NOT CHANGE THE OUTPUT FORMAT
     $fdisplay(outfile, "cycle = %d, Stall = %0d, Flush = %0d\nPC = %d", counter, stall, flush, CPU.PC.pc_o);
@@ -103,7 +102,7 @@ always@(posedge Clk) begin
     $fdisplay(outfile, "Data Memory: 0x14 = %10d", CPU.Data_Memory.memory[5]);
     $fdisplay(outfile, "Data Memory: 0x18 = %10d", CPU.Data_Memory.memory[6]);
     $fdisplay(outfile, "Data Memory: 0x1C = %10d", CPU.Data_Memory.memory[7]);
-
+    
     $fdisplay(outfile, "\n");
     
     counter = counter + 1;

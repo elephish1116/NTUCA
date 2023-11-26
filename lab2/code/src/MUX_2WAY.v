@@ -1,9 +1,9 @@
 module MUX_2WAY
 (
-	data0_i,
-	data1_i,
-	select_i,
-	data_o
+    data0_i,
+    data1_i,
+    select_i,
+    data_o
 );
 
 input [31:0] data0_i, data1_i;
